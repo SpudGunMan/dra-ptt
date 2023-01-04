@@ -333,7 +333,7 @@ int main(int argc, char *argv[]){
 
     if ((pin != -1 || level != -1) && (!hiddev || pin == -1 || level == -1)) {
 		pin = 3;
-		hidev = "/dev/hidraw0";
+		hiddev = "/dev/hidraw0";
         //printf("-H, -P, and -L must be provided together.\n");
         //return 1;
     }
