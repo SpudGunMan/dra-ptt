@@ -278,8 +278,8 @@ void print_help() {
            " -h: print this help\n"
            " -p: print attached USB devices\n"
            " -H <dev>: use <dev> for I/O\n"
-           " -P <pin>: set on <pin>\n"
-           " -L <1/0>: set <pin> to 0 (low) or 1 (high)\n");
+           " -P <pin>: set on <pin> (default is 3)\n"
+           " -L <1/0>: set PTT <pin> to 0 (low) or 1 (high)\n");
 }
 
 int main(int argc, char *argv[]){
@@ -301,11 +301,11 @@ int main(int argc, char *argv[]){
             return 0;
         case 'H':
 			if (strlen(optarg) < 10) {
-				printf("Using Default hid device: hidraw0\n");
-				hiddev = "/dev/hidraw0";
+				hiddev = optarg;
 			}
 			else {
-				hiddev = optarg;
+				printf("Using Default hid device: hidraw0\n");
+				hiddev = "/dev/hidraw0";
 			}
             break;
         case 'P':
