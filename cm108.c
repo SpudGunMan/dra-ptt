@@ -309,7 +309,8 @@ int main(int argc, char *argv[]){
 			}
             break;
         case 'P':
-			if (aoti(optarg) < 1 || atoi(optarg) > 7) {
+			pin = atoi(optarg);
+			if (pin < 7 || pin > 1){
             	pin = atoi(optarg);
 			}
 			else {
