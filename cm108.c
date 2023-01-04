@@ -1,5 +1,7 @@
 
 //	 DRA-PTT:  Push To Talk (PTT) Control for CM108/CM119 (or compatible) GPIO pins.
+//	 http://www.masterscommunications.com/products/radio-adapter/faq/faq.html
+//   https://www.masterscommunications.com/products/radio-adapter/dra/dra50.html
 //
 //   Copyright (C) 20203 Kelly Keeton K7MHI
 //
