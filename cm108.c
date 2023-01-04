@@ -286,7 +286,7 @@ int main(int argc, char *argv[]){
     int opt;
     char *hiddev = NULL;
     int level = -1;
-    int pin = -1;
+    int pin = 3;
 
     if (argc <= 1) {
         print_help();
@@ -300,7 +300,12 @@ int main(int argc, char *argv[]){
             print_help();
             return 0;
         case 'H':
-            hiddev = optarg;
+			if (strlen(optarg) < 10) {
+				printf("Using Default hid device: hidraw0\n", optarg);
+				hiddev = "/dev/hidraw0";
+			else
+				hiddev = optarg;
+			}
             break;
         case 'P':
             pin = atoi(optarg);
