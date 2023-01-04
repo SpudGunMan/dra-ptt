@@ -286,7 +286,7 @@ int main(int argc, char *argv[]){
     int opt;
     char *hiddev = NULL;
     int level = -1;
-    int pin = 3;
+    int pin = -1;
 
     if (argc <= 1) {
         print_help();
@@ -309,10 +309,12 @@ int main(int argc, char *argv[]){
 			}
             break;
         case 'P':
-            pin = atoi(optarg);
-            if (pin < 1 || pin > 7){
-                printf("Invalid pin: %s\n", optarg);
-                return 1;
+			if (aoti(optarg) < 1 || atoi(optarg) > 7) {
+            	pin = atoi(optarg);
+			}
+			else {
+                printf("Using default pin: 3\n", optarg);
+                pin = 3;
             }
             break;
         case 'L':
