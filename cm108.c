@@ -301,9 +301,10 @@ int main(int argc, char *argv[]){
             return 0;
         case 'H':
 			if (strlen(optarg) < 10) {
-				printf("Using Default hid device: hidraw0\n", optarg);
+				printf("Using Default hid device: hidraw0\n");
 				hiddev = "/dev/hidraw0";
-			else
+			}
+			else {
 				hiddev = optarg;
 			}
             break;
