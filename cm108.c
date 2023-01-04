@@ -1,5 +1,9 @@
+
+//	 DRA-PTT:  Push To Talk (PTT) Control for CM108/CM119 (or compatible) GPIO pins.
 //
-//    Adapted for standalone use by Tristan Willy.
+//   Copyright (C) 20203 Kelly Keeton K7MHI
+//
+//    CM108 Adapted for standalone use by Tristan Willy.
 //
 //    Copyright (C) 2020  Tristan Willy, KF6MUY
 //
@@ -274,18 +278,17 @@ void print_inventory() {
 }
 
 void print_help() {
-    printf("cm108 -[hp] [-H <hid device>]\n"
+    printf("cm108 -[dhp] [-H <hid device>]\n"
            " -h: print this help\n"
            " -p: print attached USB devices\n"
-           " -H <dev>: use <dev> for I/O\n"
-           " -P <pin>: set on <pin> (default is 3)\n"
-           " -L <1/0>: set PTT <pin> to 0 (low) or 1 (high)\n");
+           " -H <dev>: use <dev> for HID device\n"
+           " -d PTT daemon mode\n");
 }
 
 int main(int argc, char *argv[]){
     int opt;
     char *hiddev = NULL;
-    int level = -1;
+    int daemon = -1;
     int pin = -1;
 
     if (argc <= 1) {
@@ -293,7 +296,7 @@ int main(int argc, char *argv[]){
         return 0;
     }
 
-    while ((opt = getopt(argc, argv, "hpH:P:L:")) != -1) {
+    while ((opt = getopt(argc, argv, "dhpH:")) != -1) {
         switch (opt) {
         case '?':
         case 'h':
@@ -308,22 +311,8 @@ int main(int argc, char *argv[]){
 				hiddev = "/dev/hidraw0";
 			}
             break;
-        case 'P':
-			pin = atoi(optarg);
-			if (pin < 7 || pin > 1){
-            	pin = atoi(optarg);
-			}
-			else {
-                printf("Using default pin: 3\n", optarg);
-                pin = 3;
-            }
-            break;
-        case 'L':
-            level = atoi(optarg);
-            if (level < 0 || level > 1) {
-                printf("Invalid level: %s\n", optarg);
-                return 1;
-            }
+        case 'd':
+            daemon = 1;
             break;
         case 'p':
             print_inventory();
@@ -331,18 +320,19 @@ int main(int argc, char *argv[]){
         }
     }
 
-    if ((pin != -1 || level != -1) && (!hiddev || pin == -1 || level == -1)) {
-		pin = 3;
-		hiddev = "/dev/hidraw0";
-        //printf("-H, -P, and -L must be provided together.\n");
-        //return 1;
-    }
+    if (daemon == 1) {
+		int level = 0; // PTT GPIO 0 = off, 1 = on
+		pin = 3; // GPIO 3 is PTT
+		hiddev = "/dev/hidraw0"; // Default HID device
+		printf("PTT daemon mode\n");
+		printf("Using HID device: %s\n", hiddev);
+		printf("Using GPIO pin: %d\n", pin);
+	
+		if (cm108_set_gpio_pin(hiddev, pin, level)) {
+			printf("Failed setting GPIO pin.\n");
+			return 1;
+		}
 
-    if (pin != -1) {
-        if (cm108_set_gpio_pin(hiddev, pin, level)) {
-            printf("Failed setting GPIO pin.\n");
-            return 1;
-        }
         return 0;
     }
 
